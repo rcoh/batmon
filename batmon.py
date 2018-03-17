@@ -14,7 +14,7 @@ TOTAL_CHARGE = 'charge_full'
 @click.option('--poll-interval', default=5, help='Default polling interval in seconds')
 @click.option('--warn-percentage', default=20, help='Percentage full to display a warning')
 @click.option('--panic-percentage', default=10, help='Percentage full to display a panic')
-def main(battery, poll_interval, warn_percentage, panic_percentage) -> None:
+def main(battery, poll_interval, warn_percentage, panic_percentage):
     battery = BatteryMonitor(battery)
     is_charging = battery.is_charging()
     should_warn = not is_charging 
@@ -64,7 +64,7 @@ class BatteryMonitor:
         with open(os.path.join(POWER_SUPPLY, self.battery, TOTAL_CHARGE)) as f:
             total_charge = int(f.read())
 
-        return int((current_charge / total_charge) * 100)
+        return int((current_charge * 1.0 / total_charge) * 100)
 
 
 if __name__ == "__main__":
