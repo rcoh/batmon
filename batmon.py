@@ -22,6 +22,7 @@ def main(battery, poll_interval, warn_percentage, panic_percentage):
     while True:
         try:
             if battery.is_charging() != is_charging:
+		# Charge state changed
                 is_charging = battery.is_charging()
                 if battery.is_charging():
                     should_warn = False
@@ -44,9 +45,11 @@ def main(battery, poll_interval, warn_percentage, panic_percentage):
             time.sleep(poll_interval)
 
 def notify_warn():
+    logging.info("Notifying warning")
     call(["notify-send", "Warning! Battery power is low"])
 
 def notify_panic():
+    logging.info("Notifying panic")
     call(["notify-send", "Battery power is critically low"])
 
 class BatteryMonitor:
@@ -55,7 +58,7 @@ class BatteryMonitor:
 
     def is_charging(self):
         with open(os.path.join(POWER_SUPPLY, self.battery, 'status')) as f:
-            return f.read() == 'Discharging'
+            return f.read() != 'Discharging'
 
     def percentage(self):
         with open(os.path.join(POWER_SUPPLY, self.battery, CURRENT_CHARGE)) as f:
