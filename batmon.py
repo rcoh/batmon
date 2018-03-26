@@ -38,7 +38,8 @@ def main(battery, poll_interval, warn_percentage, panic_percentage):
                 should_warn = False
                 notify_warn()
             
-            logging.info('Current battery charge: {}'.format(percentage))
+            logging.info('Current battery charge: {}. Charing: {}'.format(percentage, battery.is_charging()))
+            print('Current battery charge: {}. Charging: {}'.format(percentage, battery.is_charging()))
         except Exception:
             logging.error('Error while checking battery levels', exc_info=True)
         finally:
@@ -58,7 +59,7 @@ class BatteryMonitor:
 
     def is_charging(self):
         with open(os.path.join(POWER_SUPPLY, self.battery, 'status')) as f:
-            return f.read() != 'Discharging'
+            return f.read().strip() != 'Discharging'
 
     def percentage(self):
         with open(os.path.join(POWER_SUPPLY, self.battery, CURRENT_CHARGE)) as f:
