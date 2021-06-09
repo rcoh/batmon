@@ -13,8 +13,6 @@ wheel = "*"
 
 
 [packages]
-
-requests = "*"
 click = "*"
 pylint = "*"
 
